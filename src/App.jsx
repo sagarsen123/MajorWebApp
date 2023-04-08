@@ -6,6 +6,7 @@ import "./App.css"
 import Navbar from "./Components/Navbar"
 import { useEffect, useState } from "react"
 import { auth } from "./Firebase"
+import Landing from "./Components/Landing"
 function App() {
 
   const [isAuthenticate,setIsAuthenticate] = useState("");
@@ -23,7 +24,8 @@ function App() {
       <Router>
         <Navbar/>
         <Routes>
-          <Route path="/" element={<HomePage Name={userName}/>}/>
+          {/* <Route path="/" element={<HomePage Name={userName}/>}/> */}
+          <Route path="/" element={<Landing/>}/>
           <Route path="/signup" element={<SignUp/>}/>
           <Route path="/login" element={<Login/>}/>
           </Routes>

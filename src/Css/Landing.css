@@ -1,0 +1,12 @@
+.LandingWrapper{
+   width: 45%;
+   min-width: 350px;
+   margin: auto;
+   height: 100%;
+   padding: 1rem;
+}
+
+.userImage{
+   width: 50%;
+   border-radius: 50%;
+}
