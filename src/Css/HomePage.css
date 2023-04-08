@@ -1,0 +1,36 @@
+.HomePage{
+  
+   display: flex;
+   justify-content: center;
+   align-items: center;
+min-height: 80vh;
+
+}
+
+.homeBtnContainer{
+   display: flex;
+   width: 100%;
+   justify-content: space-evenly;
+   margin: auto;
+   padding: 10% 20%;
+}
+
+
+.btn{
+   background: rgb(0, 0, 0);
+   color: white;
+   width:8rem;
+   border-radius: 24px;
+  
+   padding: .2rem 1rem;
+}
+
+.btn :hover{
+   color: black;
+
+}
+
+.btn Link,.btn a{
+   color: white;
+   text-decoration: none;
+}
