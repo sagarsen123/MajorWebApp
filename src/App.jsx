@@ -5,9 +5,10 @@ import Login from "./Components/Login"
 import "./App.css"
 import Navbar from "./Components/Navbar"
 import { useEffect, useState } from "react"
-import { auth } from "./Firebase"
+import { auth, rdatabase } from "./Firebase";
 import Landing from "./Components/Landing"
 import GMapComponents from "./Components/GMapComponents"
+import { ref, onValue ,set} from "firebase/database";
 import AddaVehicle from "./Components/AddaVehicle"
 
 function App() {
@@ -24,6 +25,8 @@ function App() {
   },[]);
 
   const user = auth.currentUser;
+  
+ 
   return (
     <div className="App">
       <Router>

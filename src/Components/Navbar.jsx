@@ -1,13 +1,55 @@
-import React, { useEffect } from 'react'
-import { Link ,useNavigate } from 'react-router-dom'
-import {  signOut } from "firebase/auth";
-import { ref, onValue ,set} from "firebase/database";
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { signOut } from "firebase/auth";
+import { ref, onValue, update } from "firebase/database";
 import { auth, rdatabase } from "../Firebase";
 
 
-const Navbar = ({currVehicle}) => {
+const Navbar = ({ currVehicle }) => {
   const navigate = useNavigate();
- 
+
+
+
+
+
+  try {
+    const vehicleState = ref(
+      rdatabase,
+      "usersDatabase/" + auth.currentUser.uid + "/vehicles/" + currVehicle
+    );
+
+    onValue(vehicleState,async (snapshot) => {
+
+      if (snapshot.val().state === 1 && snapshot.val().allow === 0) {
+
+        const check = confirm(`Do You Want Your Vehicle ${currVehicle} to Start?`);
+        let i=0;
+
+        if (!check) 
+        {
+          console.log("Permission Denied");
+            await update(
+            ref(rdatabase, "usersDatabase/" + auth.currentUser.uid + "/vehicles/" + currVehicle ), 
+            { state:0,allow:0}
+           )
+           return ;
+        } 
+        else if(check===1) {
+          console.log("Permission Allowed");
+          return   update(ref(rdatabase, "usersDatabase/" + auth.currentUser.uid + "/vehicles/" + currVehicle ), 
+            { allow:1,state:.1 })
+        }else{
+          await update(
+            ref(rdatabase, "usersDatabase/" + auth.currentUser.uid + "/vehicles/" + currVehicle ), 
+            { state:0,allow:0 })
+        }
+
+      }
+     } )
+  }catch(err){ console.log(err) }
+
+
+
   const handleSignOut = (e) => {
     e.preventDefault();
     signOut(auth).then(() => {
@@ -17,17 +59,8 @@ const Navbar = ({currVehicle}) => {
       alert(error.message);
     });
   }
-  const user = auth.currentUser;
 
-  const vehicleState = ref(
-    rdatabase,
-    "usersDatabase/" + auth.currentUser.uid + "/vehicles/" + currVehicle + "/state"
-  );
-  console.log(ref);
-  onValue(vehicleState,(snapshot) =>{
-      console.log(snapshot.val());
-      if(snapshot.val()==1){console.log( confirm(`are you starting Your Vehicle ${currVehicle} `));}
-  });
+
 
   // onValue(vehicleState, (snapshot) => {
   //   if (snapshot.val()==1) {
@@ -46,120 +79,72 @@ const Navbar = ({currVehicle}) => {
   // });
 
 
-  
+  const user = auth.currentUser;
   return (
-  
-  //   <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-  //   <div className="container-fluid">
-  //     <Link className="navbar-brand" to="/">
-  //       PNR-S3
-  //     </Link> 
-  //     <button
-  //       className="navbar-toggler"
-  //       type="button"
-  //       data-bs-toggle="collapse"
-  //       data-bs-target="/navbarNavDropdown"
-  //       aria-controls="navbarNavDropdown"
-  //       aria-expanded="false"
-  //       aria-label="Toggle navigation"
-  //     >
-  //       <span className="navbar-toggler-icon" />
-  //     </button>
-  //     <div className="collapse navbar-collapse" id="navbarNavDropdown">
-  //       <ul className="navbar-nav">
-  //         <li className="nav-item">
-  //           <Link className="nav-link active" aria-current="page" to="/">
-  //             Home
-  //           </Link> 
-  //         </li>
-  //         <li className="nav-item">
-  //           <Link className="nav-link" to="/">
-  //             About Us
-  //           </Link> 
-  //         </li>
-  //         <li className="nav-item">
-  //           <Link className="nav-link" to="/">
-  //             Team
-  //           </Link> 
-  //         </li>
-  //         <li className="nav-item">
-  //           <Link className="nav-link" to="/">
-  //             Contact Us
-  //           </Link> 
-  //         </li>
-  //       </ul>
-  //       <form className="d-flex flex-row justify-content-center align-items-center text-primary">
-  //   {user && <p>{user.displayName}</p>}
-  //   {user && <button className="btn btn-outline-success" onClick={()=>console.log('Clicked on User SignOut')}>
-  //     Sign Out
-  //   </button>}
-  // </form>
-  //     </div>
-  //   </div>
-  // </nav>
-  
-  <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div className="container-fluid">
-    <Link className="navbar-brand" to="/">
-      PNR-S3
-    </Link>
-    <button
-      className="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="/navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span className="navbar-toggler-icon" />
-    </button>
-    <div className="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-        <li className="nav-item">
-          <Link className="nav-link active" aria-current="page" to="/home">
-            Home
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/">
-           About Us
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/">
-           Team
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/">
-           Contact Us
-          </Link>
-        </li>
-        
-        <li className="nav-item">
-          <Link
-            className="nav-link disabled"
-            to="/"
-            tabIndex={-1}
-            aria-disabled="true"
-          >
-            Disabled
-          </Link>
-        </li>
-      </ul>
-      <form className="d-flex flex-row">
-      {user && <p className='m-2 text-light'>{user.displayName}</p>}
-     {user && <button className="btn btn-outline-success" onClick={handleSignOut}>
-    Sign Out
-    </button>}
-    {!user && <button className="btn btn-outline-success" onClick={(e)=>{e.preventDefault();navigate('/')}}>
-    Log In
-    </button>}
-      </form>
-    </div>
-  </div>
-</nav>
+
+
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div className="container-fluid">
+        <Link className="navbar-brand" to="/">
+          PNR-S3
+        </Link>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="/navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon" />
+        </button>
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            <li className="nav-item">
+              <Link className="nav-link active" aria-current="page" to="/home">
+                Home
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/">
+                About Us
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/">
+                Team
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/">
+                Contact Us
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link
+                className="nav-link disabled"
+                to="/"
+                tabIndex={-1}
+                aria-disabled="true"
+              >
+                Disabled
+              </Link>
+            </li>
+          </ul>
+          <form className="d-flex flex-row">
+            {user && <p className='m-2 text-light'>{user.displayName}</p>}
+            {user && <button className="btn btn-outline-success" onClick={handleSignOut}>
+              Sign Out
+            </button>}
+            {!user && <button className="btn btn-outline-success" onClick={(e) => { e.preventDefault(); navigate('/') }}>
+              Log In
+            </button>}
+          </form>
+        </div>
+      </div>
+    </nav>
 
 
   )
