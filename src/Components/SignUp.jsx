@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {Link,useNavigate} from 'react-router-dom'
 import "../Css/SignUp.css"
 
@@ -7,6 +7,18 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 
 const SignUp    = () => {
+
+
+  useEffect(()=>{
+    const curruser = auth.currentUser;
+    if(curruser) {
+      alert("You need to Sign Out First");
+      navigate('/');
+      return;
+    }
+
+  },[]);
+
   const[values,setValues]=useState({
     name:"",email:"",password:"",cpassword:""
   });
@@ -69,7 +81,7 @@ const SignUp    = () => {
           <button disabled={submitDisables} className='button' onClick={handleSubmit} type="submit">Sign Up</button>
       </form>
       <div className="already">
-        <p>Already Have a New Account <span><strong><Link to="/login">Log In</Link></strong></span></p>
+        <p>Already Have a New Account <span><strong><Link to="/">Log In</Link></strong></span></p>
       </div>
     </div>
     </div>

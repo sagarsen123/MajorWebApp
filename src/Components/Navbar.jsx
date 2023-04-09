@@ -1,20 +1,51 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link ,useNavigate } from 'react-router-dom'
-import { auth } from '../Firebase'
-import { getAuth, signOut } from "firebase/auth";
+import {  signOut } from "firebase/auth";
+import { ref, onValue ,set} from "firebase/database";
+import { auth, rdatabase } from "../Firebase";
 
-const Navbar = () => {
+
+const Navbar = ({currVehicle}) => {
   const navigate = useNavigate();
-  const user = auth.currentUser;
+ 
   const handleSignOut = (e) => {
     e.preventDefault();
     signOut(auth).then(() => {
       alert("Logged Out Successfully");
+      navigate('/')
     }).catch((error) => {
       alert(error.message);
     });
   }
-  console.log(user);
+  const user = auth.currentUser;
+
+  const vehicleState = ref(
+    rdatabase,
+    "usersDatabase/" + auth.currentUser.uid + "/vehicles/" + currVehicle + "/state"
+  );
+  console.log(ref);
+  onValue(vehicleState,(snapshot) =>{
+      console.log(snapshot.val());
+      if(snapshot.val()==1){console.log( confirm(`are you starting Your Vehicle ${currVehicle} `));}
+  });
+
+  // onValue(vehicleState, (snapshot) => {
+  //   if (snapshot.val()==1) {
+  //   let check =  confirm(`Are You Starting Your Vehicle ${currVehicle}`);
+  //   console.log(check);
+  //   }
+  //   // if(check) {
+  //   // //   set(ref(rdatabase, "usersDatabase/" + curruser.uid + "/vehicles/" + vehicle.vNumber), 
+  //   // //  { ...vehicle,state: "running",
+  //   // //       time: "15:00",
+  //   // //    location: { lat: 23.185884, lng: 79.97438 },}
+  //   // // ).then(()=>{alert("data added Successfully"),navigate('/')}).catch((err)=> console.log(err));
+  //   // // }
+  //   // console.log(check);
+  //   // }
+  // });
+
+
   
   return (
   
@@ -122,7 +153,7 @@ const Navbar = () => {
      {user && <button className="btn btn-outline-success" onClick={handleSignOut}>
     Sign Out
     </button>}
-    {!user && <button className="btn btn-outline-success" onClick={(e)=>{e.preventDefault();navigate('login')}}>
+    {!user && <button className="btn btn-outline-success" onClick={(e)=>{e.preventDefault();navigate('/')}}>
     Log In
     </button>}
       </form>

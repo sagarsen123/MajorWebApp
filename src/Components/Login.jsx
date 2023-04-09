@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import "../Css/Login.css";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../Firebase";
@@ -6,6 +6,18 @@ import { auth } from "../Firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 const Login = () => {
+
+  useEffect(()=>{
+    const curruser = auth.currentUser;
+    if(curruser) {
+      alert("You need to Sign Out First");
+      navigate('/landing');
+      return;
+    }
+
+  },[]);
+
+
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -25,7 +37,7 @@ const Login = () => {
     signInWithEmailAndPassword(auth, values.email, values.password)
       .then(async (res) => {
         console.log(res)
-        navigate("/");
+        navigate("/landing");
       })
       .catch((err) => setErrorMsg(err.message));
 

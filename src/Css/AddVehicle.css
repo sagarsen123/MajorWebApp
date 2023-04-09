@@ -1,0 +1,18 @@
+.AddVehicleWrapper{
+   display: flex;
+   justify-content: center;
+   align-items: center;
+
+}
+
+.addVehicleContainer{
+   height: 70vh;
+   width: 30%;
+   min-width: 350px;
+   text-align: center;
+   padding: 1rem;
+}
+
+.form-group{
+   margin: .2rem;
+}

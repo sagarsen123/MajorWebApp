@@ -34,10 +34,10 @@ const Select_Vehicle = ({setI}) => {
       <DropdownButton id="dropdown-basic-button" size="sm" className="text-center" title="Select Vehicle">
       {
          vehicleList.map((element,index)=>{
-            return <Dropdown.Item href="#/action-1" onClick={()=>setI(index)} >{element.VehicleNo}</Dropdown.Item>
+            return <Dropdown.Item onClick={()=>setI(index)} >{element.VehicleNo}</Dropdown.Item>
          })
       }
-      <Dropdown.Item ><Link to='/'>Add Another Vehicle</Link></Dropdown.Item>
+      <Dropdown.Item ><Link to='/addvehicle'>Add Another Vehicle</Link></Dropdown.Item>
     </DropdownButton>
     );
 }

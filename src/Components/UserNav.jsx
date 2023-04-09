@@ -247,7 +247,7 @@ const UserNav = () => {
             </tr>
             <tr>
               <td colSpan={2} className="text-center w-100">
-              <Button variant="primary" size="sm"><Link to='/'>Track ON Map</Link></Button>
+              <Button variant="primary" size="sm"><Link to='/trackonmap'>Track ON Map</Link></Button>
               </td>
             </tr>
           </tbody>
