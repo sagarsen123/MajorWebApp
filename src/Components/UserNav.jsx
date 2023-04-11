@@ -113,7 +113,7 @@ const UserNav = () => {
       <Tab eventKey="vehicleDetails" title="Vehicle Details">
         <div className="d-flex justify-content-around align-items-center p-1 m-1">
           <h5> See Vehicle Details</h5>
-          <Select_Vehicle setI={setI} />
+          <Select_Vehicle key={0} setI={setI} />
         </div>
         <hr className="w-75 m-auto" />
 
@@ -190,7 +190,7 @@ const UserNav = () => {
       <Tab eventKey="status" title="Status">
         <div className="d-flex justify-content-around align-items-center p-1 m-1">
           <h5> See Vehicle Details</h5>
-          <Select_Vehicle setI={setI} />
+          <Select_Vehicle key={1} setI={setI} />
         </div>
         <hr className="w-75 m-auto" />
         <Table striped>
@@ -213,7 +213,7 @@ const UserNav = () => {
       <Tab eventKey="Location" title="Location">
         <div className="d-flex justify-content-around align-items-center p-1 m-1">
           <h5> See Vehicle Details</h5>
-          <Select_Vehicle setI={setI} />
+          <Select_Vehicle key={2} setI={setI} />
         </div>
         <hr className="w-75 m-auto" />
         <Table striped>

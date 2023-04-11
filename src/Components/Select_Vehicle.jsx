@@ -2,7 +2,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import {Link} from 'react-router-dom'
 
-const Select_Vehicle = ({setI}) => {
+const Select_Vehicle = ({setI,key}) => {
    const vehicleList = [
       {
         type: "Car",

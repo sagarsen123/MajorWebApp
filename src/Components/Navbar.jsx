@@ -1,15 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { ref, onValue, update } from "firebase/database";
 import { auth, rdatabase } from "../Firebase";
 
-
 const Navbar = ({ currVehicle }) => {
   const navigate = useNavigate();
-
-
-
 
 
   try {
@@ -18,49 +14,67 @@ const Navbar = ({ currVehicle }) => {
       "usersDatabase/" + auth.currentUser.uid + "/vehicles/" + currVehicle
     );
 
-    onValue(vehicleState,async (snapshot) => {
+    onValue(vehicleState, (snapshot) => {
+      
+      
+      if (snapshot.val().state === 1 && snapshot.val().allow === 0 ) {
+        update(
+          ref(
+            rdatabase,
+            "usersDatabase/" + auth.currentUser.uid + "/vehicles/" + currVehicle
+          ),
+          { state: 0 }
+        );
+        let
+        check = confirm(
+            `Do You Want Your Vehicle ${currVehicle} to Start? click ok to Allow Cancel To Deny`
+          );
+        
 
-      if (snapshot.val().state === 1 && snapshot.val().allow === 0) {
-
-        const check = confirm(`Do You Want Your Vehicle ${currVehicle} to Start?`);
-        let i=0;
-
-        if (!check) 
-        {
-          console.log("Permission Denied");
-            await update(
-            ref(rdatabase, "usersDatabase/" + auth.currentUser.uid + "/vehicles/" + currVehicle ), 
-            { state:0,allow:0}
-           )
-           return ;
-        } 
-        else if(check===1) {
+        if (check) {
           console.log("Permission Allowed");
-          return   update(ref(rdatabase, "usersDatabase/" + auth.currentUser.uid + "/vehicles/" + currVehicle ), 
-            { allow:1,state:.1 })
-        }else{
-          await update(
-            ref(rdatabase, "usersDatabase/" + auth.currentUser.uid + "/vehicles/" + currVehicle ), 
-            { state:0,allow:0 })
+          update(
+            ref(
+              rdatabase,
+              "usersDatabase/" +
+                auth.currentUser.uid +
+                "/vehicles/" +
+                currVehicle
+            ),
+            { state: 1, allow: 1 }
+          );
+        } else if (!check) {
+          console.log("Permission Denied");
+
+          update(
+            ref(
+              rdatabase,
+              "usersDatabase/" +
+                auth.currentUser.uid +
+                "/vehicles/" +
+                currVehicle
+            ),
+            { allow: 0, state: 0.0 }
+          );
         }
-
+   
       }
-     } )
-  }catch(err){ console.log(err) }
-
-
+    });
+  } catch (err) {
+    console.log(err);
+  }
 
   const handleSignOut = (e) => {
     e.preventDefault();
-    signOut(auth).then(() => {
-      alert("Logged Out Successfully");
-      navigate('/')
-    }).catch((error) => {
-      alert(error.message);
-    });
-  }
-
-
+    signOut(auth)
+      .then(() => {
+        alert("Logged Out Successfully");
+        navigate("/");
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+  };
 
   // onValue(vehicleState, (snapshot) => {
   //   if (snapshot.val()==1) {
@@ -68,7 +82,7 @@ const Navbar = ({ currVehicle }) => {
   //   console.log(check);
   //   }
   //   // if(check) {
-  //   // //   set(ref(rdatabase, "usersDatabase/" + curruser.uid + "/vehicles/" + vehicle.vNumber), 
+  //   // //   set(ref(rdatabase, "usersDatabase/" + curruser.uid + "/vehicles/" + vehicle.vNumber),
   //   // //  { ...vehicle,state: "running",
   //   // //       time: "15:00",
   //   // //    location: { lat: 23.185884, lng: 79.97438 },}
@@ -78,11 +92,8 @@ const Navbar = ({ currVehicle }) => {
   //   // }
   // });
 
-
   const user = auth.currentUser;
   return (
-
-
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">
@@ -134,20 +145,31 @@ const Navbar = ({ currVehicle }) => {
             </li>
           </ul>
           <form className="d-flex flex-row">
-            {user && <p className='m-2 text-light'>{user.displayName}</p>}
-            {user && <button className="btn btn-outline-success" onClick={handleSignOut}>
-              Sign Out
-            </button>}
-            {!user && <button className="btn btn-outline-success" onClick={(e) => { e.preventDefault(); navigate('/') }}>
-              Log In
-            </button>}
+            {user && <p className="m-2 text-light">{user.displayName}</p>}
+            {user && (
+              <button
+                className="btn btn-outline-success"
+                onClick={handleSignOut}
+              >
+                Sign Out
+              </button>
+            )}
+            {!user && (
+              <button
+                className="btn btn-outline-success"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate("/");
+                }}
+              >
+                Log In
+              </button>
+            )}
           </form>
         </div>
       </div>
     </nav>
+  );
+};
 
-
-  )
-}
-
-export default Navbar
+export default Navbar;
