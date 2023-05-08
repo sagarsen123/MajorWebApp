@@ -39,7 +39,7 @@ const Map = ({ currVehicle }) => {
 
   return (
     <GoogleMap
-      zoom={2}
+      zoom={17}
       center={Mapcenter}
       mapContainerClassName="mapcontainer"
     >

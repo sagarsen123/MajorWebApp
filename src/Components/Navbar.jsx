@@ -133,16 +133,7 @@ const Navbar = ({ currVehicle }) => {
               </Link>
             </li>
 
-            <li className="nav-item">
-              <Link
-                className="nav-link disabled"
-                to="/"
-                tabIndex={-1}
-                aria-disabled="true"
-              >
-                Disabled
-              </Link>
-            </li>
+            
           </ul>
           <form className="d-flex flex-row">
             {user && <p className="m-2 text-light">{user.displayName}</p>}
