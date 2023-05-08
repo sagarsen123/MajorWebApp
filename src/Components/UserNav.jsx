@@ -230,19 +230,19 @@ const UserNav = () => {
             <tr>
               <td>Near By Address</td>
               <td>
-                <div className="property">Gulaua Tal</div>
+                <div className="property">Global Nature Care Sangathan's Group of Institutions</div>
               </td>
             </tr>
             <tr>
               <td>Latitude</td>
               <td>
-                <div className="property">79.9864*N</div>
+                <div className="property">23.2022703*N</div>
               </td>
             </tr>
             <tr>
               <td>Longitude</td>
               <td>
-                <div className="property">13.1815*E</div>
+                <div className="property">79.8821047*E</div>
               </td>
             </tr>
             <tr>
